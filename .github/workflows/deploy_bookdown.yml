@@ -14,10 +14,40 @@ env:
 name: renderbook
 
 jobs:
+   
   bookdown:
     name: Render-Book
     runs-on: ubuntu-latest
     steps:
+      - name: Install dependencies
+        run: |
+          apt-get update -qq \
+          && apt-get install -y --no-install-recommends \
+            gdal-bin \
+            lbzip2 \
+            libfftw3-dev \
+            libgdal-dev \
+            libgeos-dev \
+            libgsl0-dev \
+            libgl1-mesa-dev \
+            libglu1-mesa-dev \
+            libhdf4-alt-dev \
+            libhdf5-dev \
+            libjq-dev \
+            libpq-dev \
+            libproj-dev \
+            libprotobuf-dev \
+            libnetcdf-dev \
+            libsqlite3-dev \
+            libssl-dev \
+            libudunits2-dev \
+            lsb-release \
+            netcdf-bin \
+            postgis \
+            protobuf-compiler \
+            sqlite3 \
+            tk-dev \
+            unixodbc-dev
 
       - name: Checkout repo
         uses: actions/checkout@v2
