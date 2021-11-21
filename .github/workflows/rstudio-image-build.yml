@@ -1,4 +1,4 @@
-name: Image docker parcours_r_socle_preparation_des_donnees
+name: Image docker parcours_r_module_analyse_multi_dimensionnelles
 
 on:
   push:
