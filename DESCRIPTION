@@ -1,9 +1,10 @@
-Package: M4-Parcours-R
 Type: Book
+Package: M4-Parcours-R
 Title: Formations à R - Module 4 Analyses multi-dimensionnelles
 Version: 0.1.0
-URL: https://github.com/MTES-MCT/parcours_r_module_analyse_multi_dimensionnelles
+Description: Valise pédagogique pour la formation à R
 License: MIT
+URL: https://github.com/MTES-MCT/parcours_r_module_analyse_multi_dimensionnelles
 Imports: 
     bookdown,
     COGiter,
@@ -21,3 +22,5 @@ Imports:
 Remotes: 
     MaelTheuliere/COGiter,
     MTES-MCT/savoirfR
+Encoding: UTF-8
+RoxygenNote: 7.2.1

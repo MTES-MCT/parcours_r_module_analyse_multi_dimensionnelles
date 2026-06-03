@@ -3,3 +3,5 @@
 bookdown::render_book("index.Rmd", "bookdown::gitbook")
 bookdown::render_book("index.Rmd", "bookdown::epub_book")
 bookdown::render_book("index.Rmd", "bookdown::pdf_book")
+
+pak::local_install_deps(root = ".", upgrade = FALSE, ask = FALSE)
