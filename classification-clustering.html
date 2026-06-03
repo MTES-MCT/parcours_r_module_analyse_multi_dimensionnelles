@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapitre 7 Classification (clustering) | Analyse des données multi-dimensionnelles</title>
   <meta name="description" content="Parcours de formation R (module 4)" />
-  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapitre 7 Classification (clustering) | Analyse des données multi-dimensionnelles" />
   <meta property="og:type" content="book" />
-  
   
   <meta property="og:description" content="Parcours de formation R (module 4)" />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
@@ -24,7 +23,7 @@
 <meta name="author" content="Vivien Roussez &amp; Pascal Irz" />
 
 
-<meta name="date" content="2021-05-10" />
+<meta name="date" content="2026-06-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +32,8 @@
   
 <link rel="prev" href="lacm.html"/>
 
-<script src="libs/jquery-3.5.1/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -49,39 +49,43 @@
 
 
 
-
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.18/datatables.js"></script>
-<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
-<link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script>
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -90,15 +94,15 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -111,7 +115,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -125,6 +129,10 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -143,75 +151,91 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Exploration avancée des données avec R</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#le-parcours-de-formation"><i class="fa fa-check"></i><b>1.1</b> Le parcours de formation</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#objectifs-du-module-4"><i class="fa fa-check"></i><b>1.2</b> Objectifs du module 4</a></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#le-parcours-de-formation"><i class="fa fa-check"></i>Le parcours de formation</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#le-groupe-de-r%C3%A9f%C3%A9rents-r-du-p%C3%B4le-minist%C3%A9riel"><i class="fa fa-check"></i>Le groupe de référents R du pôle ministériel</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#objectifs-du-module-4"><i class="fa fa-check"></i>Objectifs du module 4</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Les analyses multivariées</a><ul>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Les analyses multivariées</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#objectifs"><i class="fa fa-check"></i><b>2.1</b> Objectifs</a></li>
-<li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#comment-synthétiser"><i class="fa fa-check"></i><b>2.2</b> Comment synthétiser ?</a></li>
-<li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#quelles-méthodes"><i class="fa fa-check"></i><b>2.3</b> Quelles méthodes ?</a></li>
-<li class="chapter" data-level="2.4" data-path="intro.html"><a href="intro.html#lien-entre-ces-méthodes"><i class="fa fa-check"></i><b>2.4</b> Lien entre ces méthodes</a></li>
+<li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#comment-synth%C3%A9tiser"><i class="fa fa-check"></i><b>2.2</b> Comment synthétiser ?</a></li>
+<li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#quelles-m%C3%A9thodes"><i class="fa fa-check"></i><b>2.3</b> Quelles méthodes ?</a></li>
+<li class="chapter" data-level="2.4" data-path="intro.html"><a href="intro.html#lien-entre-ces-m%C3%A9thodes"><i class="fa fa-check"></i><b>2.4</b> Lien entre ces méthodes</a></li>
 <li class="chapter" data-level="2.5" data-path="intro.html"><a href="intro.html#notion-de-distance"><i class="fa fa-check"></i><b>2.5</b> Notion de distance</a></li>
-<li class="chapter" data-level="2.6" data-path="intro.html"><a href="intro.html#questions-à-se-poser"><i class="fa fa-check"></i><b>2.6</b> Questions à se poser</a></li>
-<li class="chapter" data-level="2.7" data-path="intro.html"><a href="intro.html#nature-des-variables"><i class="fa fa-check"></i><b>2.7</b> Nature des variables</a><ul>
+<li class="chapter" data-level="2.6" data-path="intro.html"><a href="intro.html#questions-%C3%A0-se-poser"><i class="fa fa-check"></i><b>2.6</b> Questions à se poser</a></li>
+<li class="chapter" data-level="2.7" data-path="intro.html"><a href="intro.html#nature-des-variables"><i class="fa fa-check"></i><b>2.7</b> Nature des variables</a>
+<ul>
 <li class="chapter" data-level="2.7.1" data-path="intro.html"><a href="intro.html#variables-quantitatives"><i class="fa fa-check"></i><b>2.7.1</b> Variables quantitatives</a></li>
 <li class="chapter" data-level="2.7.2" data-path="intro.html"><a href="intro.html#variables-qualitatives"><i class="fa fa-check"></i><b>2.7.2</b> Variables qualitatives</a></li>
 <li class="chapter" data-level="2.7.3" data-path="intro.html"><a href="intro.html#entre-les-deux"><i class="fa fa-check"></i><b>2.7.3</b> Entre les deux</a></li>
 </ul></li>
 <li class="chapter" data-level="2.8" data-path="intro.html"><a href="intro.html#le-package-factominer"><i class="fa fa-check"></i><b>2.8</b> Le package FactoMineR</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="bien-commencer.html"><a href="bien-commencer.html"><i class="fa fa-check"></i><b>3</b> Bien commencer</a><ul>
-<li class="chapter" data-level="3.1" data-path="bien-commencer.html"><a href="bien-commencer.html#créer-un-projet-sous-rstudio-pour-vous-permettre-de-recenser-vos-travaux."><i class="fa fa-check"></i><b>3.1</b> Créer un projet sous Rstudio pour vous permettre de recenser vos travaux.</a></li>
-<li class="chapter" data-level="3.2" data-path="bien-commencer.html"><a href="bien-commencer.html#intégrer-vos-données"><i class="fa fa-check"></i><b>3.2</b> Intégrer vos données</a></li>
-<li class="chapter" data-level="3.3" data-path="bien-commencer.html"><a href="bien-commencer.html#créer-votre-arborescence-de-projet"><i class="fa fa-check"></i><b>3.3</b> Créer votre arborescence de projet</a></li>
-<li class="chapter" data-level="3.4" data-path="bien-commencer.html"><a href="bien-commencer.html#activer-les-packages-nécessaires"><i class="fa fa-check"></i><b>3.4</b> Activer les packages nécessaires</a></li>
-<li class="chapter" data-level="3.5" data-path="bien-commencer.html"><a href="bien-commencer.html#bien-structurer-ses-projets-data"><i class="fa fa-check"></i><b>3.5</b> Bien structurer ses projets <em>data</em></a></li>
+<li class="chapter" data-level="3" data-path="get-started.html"><a href="get-started.html"><i class="fa fa-check"></i><b>3</b> Bien commencer</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="get-started.html"><a href="get-started.html#cr%C3%A9er-un-projet-sous-rstudio-pour-vous-permettre-de-recenser-vos-travaux."><i class="fa fa-check"></i><b>3.1</b> Créer un projet sous Rstudio pour vous permettre de recenser vos travaux.</a></li>
+<li class="chapter" data-level="3.2" data-path="get-started.html"><a href="get-started.html#int%C3%A9grer-vos-donn%C3%A9es"><i class="fa fa-check"></i><b>3.2</b> Intégrer vos données</a></li>
+<li class="chapter" data-level="3.3" data-path="get-started.html"><a href="get-started.html#cr%C3%A9er-votre-arborescence-de-projet"><i class="fa fa-check"></i><b>3.3</b> Créer votre arborescence de projet</a></li>
+<li class="chapter" data-level="3.4" data-path="get-started.html"><a href="get-started.html#activer-les-packages-n%C3%A9cessaires"><i class="fa fa-check"></i><b>3.4</b> Activer les packages nécessaires</a></li>
+<li class="chapter" data-level="3.5" data-path="get-started.html"><a href="get-started.html#bien-structurer-ses-projets-data"><i class="fa fa-check"></i><b>3.5</b> Bien structurer ses projets <em>data</em></a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="lacp.html"><a href="lacp.html"><i class="fa fa-check"></i><b>4</b> L’ACP</a><ul>
-<li class="chapter" data-level="4.1" data-path="lacp.html"><a href="lacp.html#principe-de-lacp"><i class="fa fa-check"></i><b>4.1</b> Principe de l’ACP</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="lacp.html"><a href="lacp.html#type-de-données"><i class="fa fa-check"></i><b>4.1.1</b> Type de données</a></li>
+<li class="chapter" data-level="4" data-path="lacp.html"><a href="lacp.html"><i class="fa fa-check"></i><b>4</b> L’ACP</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="lacp.html"><a href="lacp.html#principe-de-lacp"><i class="fa fa-check"></i><b>4.1</b> Principe de l’ACP</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="lacp.html"><a href="lacp.html#type-de-donn%C3%A9es"><i class="fa fa-check"></i><b>4.1.1</b> Type de données</a></li>
 <li class="chapter" data-level="4.1.2" data-path="lacp.html"><a href="lacp.html#objectifs-1"><i class="fa fa-check"></i><b>4.1.2</b> Objectifs</a></li>
-<li class="chapter" data-level="4.1.3" data-path="lacp.html"><a href="lacp.html#méthode"><i class="fa fa-check"></i><b>4.1.3</b> Méthode</a></li>
-<li class="chapter" data-level="4.1.4" data-path="lacp.html"><a href="lacp.html#centrer---réduire"><i class="fa fa-check"></i><b>4.1.4</b> Centrer - réduire ?</a></li>
+<li class="chapter" data-level="4.1.3" data-path="lacp.html"><a href="lacp.html#m%C3%A9thode"><i class="fa fa-check"></i><b>4.1.3</b> Méthode</a></li>
+<li class="chapter" data-level="4.1.4" data-path="lacp.html"><a href="lacp.html#centrer---r%C3%A9duire"><i class="fa fa-check"></i><b>4.1.4</b> Centrer - réduire ?</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="lacp.html"><a href="lacp.html#lacp-avec-factominer"><i class="fa fa-check"></i><b>4.2</b> L’ACP avec FactoMiner</a><ul>
+<li class="chapter" data-level="4.2" data-path="lacp.html"><a href="lacp.html#lacp-avec-factominer"><i class="fa fa-check"></i><b>4.2</b> L’ACP avec FactoMiner</a>
+<ul>
 <li class="chapter" data-level="4.2.1" data-path="lacp.html"><a href="lacp.html#ressources"><i class="fa fa-check"></i><b>4.2.1</b> Ressources</a></li>
 <li class="chapter" data-level="4.2.2" data-path="lacp.html"><a href="lacp.html#exemple"><i class="fa fa-check"></i><b>4.2.2</b> Exemple</a></li>
-<li class="chapter" data-level="4.2.3" data-path="lacp.html"><a href="lacp.html#repérer-un-effet-taille"><i class="fa fa-check"></i><b>4.2.3</b> Repérer un effet taille</a></li>
+<li class="chapter" data-level="4.2.3" data-path="lacp.html"><a href="lacp.html#rep%C3%A9rer-un-effet-taille"><i class="fa fa-check"></i><b>4.2.3</b> Repérer un effet taille</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="lacp.html"><a href="lacp.html#exercice"><i class="fa fa-check"></i><b>4.3</b> Exercice</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="lafc.html"><a href="lafc.html"><i class="fa fa-check"></i><b>5</b> L’AFC</a><ul>
+<li class="chapter" data-level="5" data-path="lafc.html"><a href="lafc.html"><i class="fa fa-check"></i><b>5</b> L’AFC</a>
+<ul>
 <li class="chapter" data-level="5.1" data-path="lafc.html"><a href="lafc.html#principe-de-lafc"><i class="fa fa-check"></i><b>5.1</b> Principe de l’AFC</a></li>
-<li class="chapter" data-level="5.2" data-path="lafc.html"><a href="lafc.html#lafc-avec-factominer"><i class="fa fa-check"></i><b>5.2</b> L’AFC avec FactoMiner</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="lafc.html"><a href="lafc.html#données-utilisées-1"><i class="fa fa-check"></i><b>5.2.1</b> Données utilisées</a></li>
-<li class="chapter" data-level="5.2.2" data-path="lafc.html"><a href="lafc.html#réalisation-de-lafc"><i class="fa fa-check"></i><b>5.2.2</b> Réalisation de l’AFC</a></li>
-<li class="chapter" data-level="5.2.3" data-path="lafc.html"><a href="lafc.html#nombre-daxes-à-retenir-1"><i class="fa fa-check"></i><b>5.2.3</b> Nombre d’axes à retenir</a></li>
-<li class="chapter" data-level="5.2.4" data-path="lafc.html"><a href="lafc.html#interprétation-des-axes"><i class="fa fa-check"></i><b>5.2.4</b> Interprétation des axes</a></li>
+<li class="chapter" data-level="5.2" data-path="lafc.html"><a href="lafc.html#lafc-avec-factominer"><i class="fa fa-check"></i><b>5.2</b> L’AFC avec FactoMiner</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="lafc.html"><a href="lafc.html#donn%C3%A9es-utilis%C3%A9es-1"><i class="fa fa-check"></i><b>5.2.1</b> Données utilisées</a></li>
+<li class="chapter" data-level="5.2.2" data-path="lafc.html"><a href="lafc.html#r%C3%A9alisation-de-lafc"><i class="fa fa-check"></i><b>5.2.2</b> Réalisation de l’AFC</a></li>
+<li class="chapter" data-level="5.2.3" data-path="lafc.html"><a href="lafc.html#nombre-daxes-%C3%A0-retenir-1"><i class="fa fa-check"></i><b>5.2.3</b> Nombre d’axes à retenir</a></li>
+<li class="chapter" data-level="5.2.4" data-path="lafc.html"><a href="lafc.html#interpr%C3%A9tation-des-axes"><i class="fa fa-check"></i><b>5.2.4</b> Interprétation des axes</a></li>
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="lafc.html"><a href="lafc.html#exercice-1"><i class="fa fa-check"></i><b>5.3</b> Exercice</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="lacm.html"><a href="lacm.html"><i class="fa fa-check"></i><b>6</b> L’ACM</a><ul>
-<li class="chapter" data-level="6.1" data-path="lacm.html"><a href="lacm.html#principe-de-lacm"><i class="fa fa-check"></i><b>6.1</b> Principe de l’ACM</a><ul>
+<li class="chapter" data-level="6" data-path="lacm.html"><a href="lacm.html"><i class="fa fa-check"></i><b>6</b> L’ACM</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="lacm.html"><a href="lacm.html#principe-de-lacm"><i class="fa fa-check"></i><b>6.1</b> Principe de l’ACM</a>
+<ul>
 <li class="chapter" data-level="6.1.1" data-path="lacm.html"><a href="lacm.html#le-tableau-disjonctif-complet"><i class="fa fa-check"></i><b>6.1.1</b> Le tableau disjonctif complet</a></li>
 </ul></li>
 <li class="chapter" data-level="6.2" data-path="lacm.html"><a href="lacm.html#ressources-1"><i class="fa fa-check"></i><b>6.2</b> Ressources</a></li>
-<li class="chapter" data-level="6.3" data-path="lacm.html"><a href="lacm.html#lacm-avec-factominer"><i class="fa fa-check"></i><b>6.3</b> L’ACM avec FactoMiner</a><ul>
+<li class="chapter" data-level="6.3" data-path="lacm.html"><a href="lacm.html#lacm-avec-factominer"><i class="fa fa-check"></i><b>6.3</b> L’ACM avec FactoMiner</a>
+<ul>
 <li class="chapter" data-level="6.3.1" data-path="lacm.html"><a href="lacm.html#exemple-1"><i class="fa fa-check"></i><b>6.3.1</b> Exemple</a></li>
-<li class="chapter" data-level="6.3.2" data-path="lacm.html"><a href="lacm.html#réalisation-de-lacm"><i class="fa fa-check"></i><b>6.3.2</b> Réalisation de l’ACM</a></li>
-<li class="chapter" data-level="6.3.3" data-path="lacm.html"><a href="lacm.html#variables-supplémentaires"><i class="fa fa-check"></i><b>6.3.3</b> Variables supplémentaires</a></li>
+<li class="chapter" data-level="6.3.2" data-path="lacm.html"><a href="lacm.html#r%C3%A9alisation-de-lacm"><i class="fa fa-check"></i><b>6.3.2</b> Réalisation de l’ACM</a></li>
+<li class="chapter" data-level="6.3.3" data-path="lacm.html"><a href="lacm.html#variables-suppl%C3%A9mentaires"><i class="fa fa-check"></i><b>6.3.3</b> Variables supplémentaires</a></li>
 </ul></li>
 <li class="chapter" data-level="6.4" data-path="lacm.html"><a href="lacm.html#exercice-2"><i class="fa fa-check"></i><b>6.4</b> Exercice</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="classification-clustering.html"><a href="classification-clustering.html"><i class="fa fa-check"></i><b>7</b> Classification (clustering)</a><ul>
-<li class="chapter" data-level="7.1" data-path="classification-clustering.html"><a href="classification-clustering.html#les-k-moyennes"><i class="fa fa-check"></i><b>7.1</b> Les k-moyennes</a><ul>
+<li class="chapter" data-level="7" data-path="classification-clustering.html"><a href="classification-clustering.html"><i class="fa fa-check"></i><b>7</b> Classification (clustering)</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="classification-clustering.html"><a href="classification-clustering.html#les-k-moyennes"><i class="fa fa-check"></i><b>7.1</b> Les k-moyennes</a>
+<ul>
 <li class="chapter" data-level="7.1.1" data-path="classification-clustering.html"><a href="classification-clustering.html#principe"><i class="fa fa-check"></i><b>7.1.1</b> Principe</a></li>
 <li class="chapter" data-level="7.1.2" data-path="classification-clustering.html"><a href="classification-clustering.html#mise-en-oeuvre"><i class="fa fa-check"></i><b>7.1.2</b> Mise en oeuvre</a></li>
 <li class="chapter" data-level="7.1.3" data-path="classification-clustering.html"><a href="classification-clustering.html#quelques-conseils"><i class="fa fa-check"></i><b>7.1.3</b> Quelques conseils</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="classification-clustering.html"><a href="classification-clustering.html#la-classification-ascendante-hiérarchique-cah"><i class="fa fa-check"></i><b>7.2</b> La classification ascendante hiérarchique (CAH)</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="classification-clustering.html"><a href="classification-clustering.html#détermination-du-nombre-de-classes"><i class="fa fa-check"></i><b>7.2.1</b> Détermination du nombre de classes</a></li>
+<li class="chapter" data-level="7.2" data-path="classification-clustering.html"><a href="classification-clustering.html#la-classification-ascendante-hi%C3%A9rarchique-cah"><i class="fa fa-check"></i><b>7.2</b> La classification ascendante hiérarchique (CAH)</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="classification-clustering.html"><a href="classification-clustering.html#d%C3%A9termination-du-nombre-de-classes"><i class="fa fa-check"></i><b>7.2.1</b> Détermination du nombre de classes</a></li>
 <li class="chapter" data-level="7.2.2" data-path="classification-clustering.html"><a href="classification-clustering.html#description-des-classes"><i class="fa fa-check"></i><b>7.2.2</b> Description des classes</a></li>
 <li class="chapter" data-level="7.2.3" data-path="classification-clustering.html"><a href="classification-clustering.html#quelques-conseils-pratiques"><i class="fa fa-check"></i><b>7.2.3</b> Quelques conseils pratiques</a></li>
 </ul></li>
@@ -238,14 +262,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="classification-clustering" class="section level1">
-<h1><span class="header-section-number">Chapitre 7</span> Classification (clustering)</h1>
+<div id="classification-clustering" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">Chapitre 7</span> Classification (clustering)<a href="classification-clustering.html#classification-clustering" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Les méthodes de classification (= de partitionnement) servent à délimiter des groupes d’individus, ou typologies, à partir des caractéristiques de ces individus. En particulier, elles visent à distinguer des ensembles au sein desquels les individus se ressemblent plus qu’ils ne ressemblent aux individus des autres groupes.</p>
 <p>Il faut être prudent dans leur interprétation : le fait que la méthode réussisse à délimiter des groupes ne démontre en rien la pertinence du découpage (c’est-à-dire l’existence de discontinuités entre des groupes plutôt homogènes). Ce n’est pas parce que vous avez découpé, avec un couteau, une tarte en 5 parts, que ce découpage reflète des discontinuités antérieures. Les méthodes de classifications sont, en quelques sortes, des couteaux …</p>
-<div id="les-k-moyennes" class="section level2">
-<h2><span class="header-section-number">7.1</span> Les k-moyennes</h2>
-<div id="principe" class="section level3">
-<h3><span class="header-section-number">7.1.1</span> Principe</h3>
+<div id="les-k-moyennes" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> Les k-moyennes<a href="classification-clustering.html#les-k-moyennes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="principe" class="section level3 hasAnchor" number="7.1.1">
+<h3><span class="header-section-number">7.1.1</span> Principe<a href="classification-clustering.html#principe" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>L’algorithme des k-moyennes (ou nuées dynamiques, k-means en anglais) consiste à regrouper les individus dans k classes les plus homogènes possibles. Son fonctionnement est très intuitif et il est très peu coûteux en termes de calcul :</p>
 <ul>
 <li>l’utilisateur choisit le nombre de classes <span class="math inline">\(k\)</span>.</li>
@@ -257,32 +281,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>Cet algorithme fonctionne sur des variables <strong>quantitatives</strong> ; on peut le mobiliser sur les coordonnées factorielles des individus et donc l’appliquer sur des variables initialement qualitative (après avoir fait une ACM / AFC). En pratique, il converge assez rapidement et est donc très efficace, même sur de grands jeux de données.</p>
 </div>
-<div id="mise-en-oeuvre" class="section level3">
-<h3><span class="header-section-number">7.1.2</span> Mise en oeuvre</h3>
+<div id="mise-en-oeuvre" class="section level3 hasAnchor" number="7.1.2">
+<h3><span class="header-section-number">7.1.2</span> Mise en oeuvre<a href="classification-clustering.html#mise-en-oeuvre" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Exemple sur les hobbies :</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1">coord &lt;-<span class="st"> </span><span class="kw">as.data.frame</span> (acm<span class="op">$</span>ind<span class="op">$</span>coord)</a>
-<a class="sourceLine" id="cb70-2" data-line-number="2">classif &lt;-<span class="st"> </span><span class="kw">kmeans</span> (coord, <span class="dt">centers =</span> <span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb70-3" data-line-number="3"><span class="kw">str</span> (classif)</a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="classification-clustering.html#cb70-1" tabindex="-1"></a>coord <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span> (acm<span class="sc">$</span>ind<span class="sc">$</span>coord)</span>
+<span id="cb70-2"><a href="classification-clustering.html#cb70-2" tabindex="-1"></a>classif <span class="ot">&lt;-</span> <span class="fu">kmeans</span> (coord, <span class="at">centers =</span> <span class="dv">4</span>)</span>
+<span id="cb70-3"><a href="classification-clustering.html#cb70-3" tabindex="-1"></a><span class="fu">str</span> (classif)</span></code></pre></div>
 <pre><code>## List of 9
-##  $ cluster     : Named int [1:8403] 3 1 4 4 4 4 1 3 3 3 ...
+##  $ cluster     : Named int [1:8403] 2 1 3 4 3 4 3 2 2 2 ...
 ##   ..- attr(*, &quot;names&quot;)= chr [1:8403] &quot;11000210&quot; &quot;11000410&quot; &quot;11000610&quot; &quot;11000710&quot; ...
-##  $ centers     : num [1:4, 1:4] -0.0806 -0.056 0.5301 -0.4031 0.2161 ...
+##  $ centers     : num [1:4, 1:4] -0.0281 0.5685 -0.1101 -0.4775 0.282 ...
 ##   ..- attr(*, &quot;dimnames&quot;)=List of 2
 ##   .. ..$ : chr [1:4] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot;
 ##   .. ..$ : chr [1:4] &quot;Dim 1&quot; &quot;Dim 2&quot; &quot;Dim 3&quot; &quot;Dim 4&quot;
 ##  $ totss       : num 3473
-##  $ withinss    : num [1:4] 316 304 607 492
-##  $ tot.withinss: num 1719
-##  $ betweenss   : num 1753
-##  $ size        : int [1:4] 1479 1594 2526 2804
+##  $ withinss    : num [1:4] 329 571 471 371
+##  $ tot.withinss: num 1742
+##  $ betweenss   : num 1731
+##  $ size        : int [1:4] 1468 2330 2492 2113
 ##  $ iter        : int 5
 ##  $ ifault      : int 0
 ##  - attr(*, &quot;class&quot;)= chr &quot;kmeans&quot;</code></pre>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1"><span class="co"># Taille des clusters</span></a>
-<a class="sourceLine" id="cb72-2" data-line-number="2"><span class="kw">table</span> (classif<span class="op">$</span>cluster)</a></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="classification-clustering.html#cb72-1" tabindex="-1"></a><span class="co"># Taille des clusters</span></span>
+<span id="cb72-2"><a href="classification-clustering.html#cb72-2" tabindex="-1"></a><span class="fu">table</span> (classif<span class="sc">$</span>cluster)</span></code></pre></div>
 <pre><code>## 
 ##    1    2    3    4 
-## 1479 1594 2526 2804</code></pre>
+## 1468 2330 2492 2113</code></pre>
 <p>Remarques :</p>
 <ul>
 <li>Le nombre de classes est choisi de façon arbitraire (comment savoir si ce nombre est correct ?).</li>
@@ -292,27 +316,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>fixer la “graine” du générateur de nombres aléatoires.</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1"><span class="co"># initialisation des centres avec les quintiles (ça fait 4 points)</span></a>
-<a class="sourceLine" id="cb74-2" data-line-number="2"><span class="co"># Avec du R de base hyper efficace ^^ </span></a>
-<a class="sourceLine" id="cb74-3" data-line-number="3">init &lt;-<span class="st"> </span><span class="kw">sapply</span> (coord, <span class="cf">function</span>(x) <span class="kw">quantile</span> (x, <span class="kw">seq</span>(.<span class="dv">2</span>,.<span class="dv">8</span>,.<span class="dv">2</span>)))</a>
-<a class="sourceLine" id="cb74-4" data-line-number="4">classif &lt;-<span class="st"> </span><span class="kw">kmeans</span> (coord, <span class="dt">centers =</span> init)</a>
-<a class="sourceLine" id="cb74-5" data-line-number="5"><span class="co"># initialisation du générateur de nombres aléatoires</span></a>
-<a class="sourceLine" id="cb74-6" data-line-number="6"><span class="kw">set.seed</span> (<span class="dv">1234</span>)</a>
-<a class="sourceLine" id="cb74-7" data-line-number="7">classif &lt;-<span class="st"> </span><span class="kw">kmeans</span> (coord, <span class="dt">centers =</span> <span class="dv">4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="classification-clustering.html#cb74-1" tabindex="-1"></a><span class="co"># initialisation des centres avec les quintiles (ça fait 4 points)</span></span>
+<span id="cb74-2"><a href="classification-clustering.html#cb74-2" tabindex="-1"></a><span class="co"># Avec du R de base hyper efficace ^^ </span></span>
+<span id="cb74-3"><a href="classification-clustering.html#cb74-3" tabindex="-1"></a>init <span class="ot">&lt;-</span> <span class="fu">sapply</span> (coord, <span class="cf">function</span>(x) <span class="fu">quantile</span> (x, <span class="fu">seq</span>(.<span class="dv">2</span>,.<span class="dv">8</span>,.<span class="dv">2</span>)))</span>
+<span id="cb74-4"><a href="classification-clustering.html#cb74-4" tabindex="-1"></a>classif <span class="ot">&lt;-</span> <span class="fu">kmeans</span> (coord, <span class="at">centers =</span> init)</span>
+<span id="cb74-5"><a href="classification-clustering.html#cb74-5" tabindex="-1"></a><span class="co"># initialisation du générateur de nombres aléatoires</span></span>
+<span id="cb74-6"><a href="classification-clustering.html#cb74-6" tabindex="-1"></a><span class="fu">set.seed</span> (<span class="dv">1234</span>)</span>
+<span id="cb74-7"><a href="classification-clustering.html#cb74-7" tabindex="-1"></a>classif <span class="ot">&lt;-</span> <span class="fu">kmeans</span> (coord, <span class="at">centers =</span> <span class="dv">4</span>)</span></code></pre></div>
 <p>Pour récupérer les résultat dans son <em>dataframe</em>, il suffit de rajouter le vecteur résultat dans le <em>dataframe</em> initial :</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" data-line-number="1"><span class="kw">names</span> (coord) &lt;-<span class="st"> </span><span class="kw">paste</span> (<span class="st">&quot;Axe&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb75-2" data-line-number="2">coord &lt;-<span class="st"> </span><span class="kw">mutate</span> (coord, <span class="dt">classe =</span> <span class="kw">as.factor</span> (classif<span class="op">$</span>cluster))</a>
-<a class="sourceLine" id="cb75-3" data-line-number="3"><span class="kw">ggplot</span> (coord, <span class="kw">aes</span> (<span class="dt">x =</span> Axe1, <span class="dt">y =</span> Axe2, <span class="dt">color =</span> classe)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb75-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="exploration_avancee_files/figure-html/clust_3-1.png" width="576" /></p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" data-line-number="1"><span class="kw">ggplot</span> (coord, <span class="kw">aes</span> (<span class="dt">x =</span> Axe3, <span class="dt">y =</span> Axe4, <span class="dt">color =</span> classe)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb76-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="exploration_avancee_files/figure-html/clust_3-2.png" width="576" /></p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="classification-clustering.html#cb75-1" tabindex="-1"></a><span class="fu">names</span> (coord) <span class="ot">&lt;-</span> <span class="fu">paste</span> (<span class="st">&quot;Axe&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb75-2"><a href="classification-clustering.html#cb75-2" tabindex="-1"></a>coord <span class="ot">&lt;-</span> <span class="fu">mutate</span> (coord, <span class="at">classe =</span> <span class="fu">as.factor</span> (classif<span class="sc">$</span>cluster))</span>
+<span id="cb75-3"><a href="classification-clustering.html#cb75-3" tabindex="-1"></a><span class="fu">ggplot</span> (coord, <span class="fu">aes</span> (<span class="at">x =</span> Axe1, <span class="at">y =</span> Axe2, <span class="at">color =</span> classe)) <span class="sc">+</span></span>
+<span id="cb75-4"><a href="classification-clustering.html#cb75-4" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="exploration_avancee_files/figure-html/clust_3-1.png" alt="" width="576" /></p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="classification-clustering.html#cb76-1" tabindex="-1"></a><span class="fu">ggplot</span> (coord, <span class="fu">aes</span> (<span class="at">x =</span> Axe3, <span class="at">y =</span> Axe4, <span class="at">color =</span> classe)) <span class="sc">+</span></span>
+<span id="cb76-2"><a href="classification-clustering.html#cb76-2" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="exploration_avancee_files/figure-html/clust_3-2.png" alt="" width="576" /></p>
 <p>Ici on remarque que les classes 2 et 3 s’opposent sur le premier plan factoriel : la classe 2 est plutôt du côté des personnes ayant peu de hobbies, à l’inverse de la classe 3 est composée d’individus ayant des occupations plutôt culturelles.
 Les classes 1 et 4 sont opposées sur l’axe 3, ce qui signifie que la 1 regroupe des individus aux loisirs plutôt domestiques et la 4 des individus ayant des loisirs de plein air.</p>
 </div>
-<div id="quelques-conseils" class="section level3">
-<h3><span class="header-section-number">7.1.3</span> Quelques conseils</h3>
+<div id="quelques-conseils" class="section level3 hasAnchor" number="7.1.3">
+<h3><span class="header-section-number">7.1.3</span> Quelques conseils<a href="classification-clustering.html#quelques-conseils" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Pour décrire les classes, on peut, en plus de la représentation sur les axes factoriels, faire un tableau croisé de cette nouvelle variable avec les variables initiales qualitatives ou calculer des rapports de corrélations avec les variables initiales quantitatives.</p>
 <p>Pour choisir le nombre de classes, on peut :</p>
 <ul>
@@ -322,8 +346,8 @@ Les classes 1 et 4 sont opposées sur l’axe 3, ce qui signifie que la 1 regrou
 </ul>
 </div>
 </div>
-<div id="la-classification-ascendante-hiérarchique-cah" class="section level2">
-<h2><span class="header-section-number">7.2</span> La classification ascendante hiérarchique (CAH)</h2>
+<div id="la-classification-ascendante-hiérarchique-cah" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> La classification ascendante hiérarchique (CAH)<a href="classification-clustering.html#la-classification-ascendante-hi%C3%A9rarchique-cah" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Pourquoi cet acronyme ?</p>
 <ul>
 <li>Classification : on regroupe nos individus dans des classes</li>
@@ -354,8 +378,8 @@ Les classes 1 et 4 sont opposées sur l’axe 3, ce qui signifie que la 1 regrou
 <li>Utiliser la méthode de Ward : à chaque étape, agréger les individus (groupes) font perdre le moins <em>d’inertie inter-classes</em></li>
 </ul>
 <p><span class="math inline">\(\Rightarrow\)</span> la fonction <code>HCPC</code> du package factominer le fait directement pour vous.</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" data-line-number="1">hc &lt;-<span class="st"> </span><span class="kw">HCPC</span> (acm, <span class="dt">nb.clust =</span> <span class="dv">5</span>, <span class="dt">graph=</span>F)</a>
-<a class="sourceLine" id="cb77-2" data-line-number="2"><span class="kw">str</span>(hc)</a></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="classification-clustering.html#cb77-1" tabindex="-1"></a>hc <span class="ot">&lt;-</span> <span class="fu">HCPC</span> (acm, <span class="at">nb.clust =</span> <span class="dv">5</span>, <span class="at">graph=</span>F)</span>
+<span id="cb77-2"><a href="classification-clustering.html#cb77-2" tabindex="-1"></a><span class="fu">str</span>(hc)</span></code></pre></div>
 <pre><code>## List of 5
 ##  $ data.clust:&#39;data.frame&#39;:  8403 obs. of  24 variables:
 ##   ..$ Reading        : Factor w/ 2 levels &quot;Reading_0&quot;,&quot;Reading_1&quot;: 2 2 2 2 2 1 1 2 2 2 ...
@@ -413,25 +437,25 @@ Les classes 1 et 4 sont opposées sur l’axe 3, ce qui signifie que la 1 regrou
 ##   .. .. ..$ : chr &quot;nb.activitees&quot;
 ##   .. .. ..$ : chr [1:2] &quot;Eta2&quot; &quot;P-value&quot;
 ##   ..$ quanti    :List of 5
-##   .. ..$ 1: num [1, 1:6] -63.59 2.97 6.87 1.23 3.38 ...
+##   .. ..$ 1: num [1, 1:7] -63.59 2.97 6.87 1.23 3.38 ...
 ##   .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2
 ##   .. .. .. ..$ : chr &quot;nb.activitees&quot;
-##   .. .. .. ..$ : chr [1:6] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
+##   .. .. .. ..$ : chr [1:7] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
 ##   .. ..$ 2: NULL
 ##   .. ..$ 3: NULL
-##   .. ..$ 4: num [1, 1:6] 2.14 7.02 6.87 1.54 3.38 ...
+##   .. ..$ 4: num [1, 1:7] 2.14 7.02 6.87 1.54 3.38 ...
 ##   .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2
 ##   .. .. .. ..$ : chr &quot;nb.activitees&quot;
-##   .. .. .. ..$ : chr [1:6] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
-##   .. ..$ 5: num [1, 1:6] 65.86 11.61 6.87 1.72 3.38 ...
+##   .. .. .. ..$ : chr [1:7] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
+##   .. ..$ 5: num [1, 1:7] 65.86 11.61 6.87 1.72 3.38 ...
 ##   .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2
 ##   .. .. .. ..$ : chr &quot;nb.activitees&quot;
-##   .. .. .. ..$ : chr [1:6] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
-##   ..$ call      :List of 4
-##   .. ..$ num.var: int 24
-##   .. ..$ proba  : num 0.05
-##   .. ..$ row.w  : num [1:8403] 1 1 1 1 1 1 1 1 1 1 ...
-##   .. ..$ X      :&#39;data.frame&#39;:   8403 obs. of  24 variables:
+##   .. .. .. ..$ : chr [1:7] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
+##   ..$ call      :List of 5
+##   .. ..$ num.var  : int 24
+##   .. ..$ proba    : num 0.05
+##   .. ..$ row.w    : num [1:8403] 1 1 1 1 1 1 1 1 1 1 ...
+##   .. ..$ X        :&#39;data.frame&#39;: 8403 obs. of  24 variables:
 ##   .. .. ..$ Reading        : Factor w/ 2 levels &quot;Reading_0&quot;,&quot;Reading_1&quot;: 2 2 2 2 2 1 1 2 2 2 ...
 ##   .. .. ..$ Listening.music: Factor w/ 2 levels &quot;Listening music_0&quot;,..: 2 1 2 1 2 1 2 2 2 2 ...
 ##   .. .. ..$ Cinema         : Factor w/ 2 levels &quot;Cinema_0&quot;,&quot;Cinema_1&quot;: 2 1 1 1 2 1 1 2 2 2 ...
@@ -456,6 +480,7 @@ Les classes 1 et 4 sont opposées sur l’axe 3, ce qui signifie que la 1 regrou
 ##   .. .. ..$ Profession     : Factor w/ 8 levels &quot;Employee&quot;,&quot;Foreman&quot;,..: 3 6 3 6 1 4 1 6 3 1 ...
 ##   .. .. ..$ nb.activitees  : int [1:8403] 11 9 5 5 6 2 5 7 10 8 ...
 ##   .. .. ..$ clust          : Factor w/ 5 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 5 2 4 4 4 1 4 4 5 4 ...
+##   .. ..$ na.method: chr &quot;NA&quot;
 ##   ..- attr(*, &quot;class&quot;)= chr [1:2] &quot;catdes&quot; &quot;list&quot;
 ##  $ desc.axes :List of 3
 ##   ..$ quanti.var: num [1:4, 1:2] 0.775 0.514 0.473 0.124 0 ...
@@ -463,36 +488,37 @@ Les classes 1 et 4 sont opposées sur l’axe 3, ce qui signifie que la 1 regrou
 ##   .. .. ..$ : chr [1:4] &quot;Dim.1&quot; &quot;Dim.2&quot; &quot;Dim.3&quot; &quot;Dim.4&quot;
 ##   .. .. ..$ : chr [1:2] &quot;Eta2&quot; &quot;P-value&quot;
 ##   ..$ quanti    :List of 5
-##   .. ..$ 1: num [1:3, 1:6] 20.0562 -19.0684 -59.7633 0.0912 -0.0982 ...
+##   .. ..$ 1: num [1:3, 1:7] 20.0562 -19.0684 -59.7633 0.0912 -0.0982 ...
 ##   .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2
 ##   .. .. .. ..$ : chr [1:3] &quot;Dim.4&quot; &quot;Dim.2&quot; &quot;Dim.1&quot;
-##   .. .. .. ..$ : chr [1:6] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
-##   .. ..$ 2: num [1:4, 1:6] 48.887 35.121 -8.115 -14.74 0.336 ...
+##   .. .. .. ..$ : chr [1:7] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
+##   .. ..$ 2: num [1:4, 1:7] 48.887 35.121 -8.115 -14.74 0.336 ...
 ##   .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2
 ##   .. .. .. ..$ : chr [1:4] &quot;Dim.3&quot; &quot;Dim.2&quot; &quot;Dim.1&quot; &quot;Dim.4&quot;
-##   .. .. .. ..$ : chr [1:6] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
-##   .. ..$ 3: num [1:4, 1:6] 38.53 -3.124 -7.159 -48.17 0.266 ...
+##   .. .. .. ..$ : chr [1:7] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
+##   .. ..$ 3: num [1:4, 1:7] 38.53 -3.124 -7.159 -48.17 0.266 ...
 ##   .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2
 ##   .. .. .. ..$ : chr [1:4] &quot;Dim.2&quot; &quot;Dim.4&quot; &quot;Dim.1&quot; &quot;Dim.3&quot;
-##   .. .. .. ..$ : chr [1:6] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
-##   .. ..$ 4: num [1:4, 1:6] 10.564 -3.069 -21.439 -47.23 0.101 ...
+##   .. .. .. ..$ : chr [1:7] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
+##   .. ..$ 4: num [1:4, 1:7] 10.564 -3.069 -21.439 -47.23 0.101 ...
 ##   .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2
 ##   .. .. .. ..$ : chr [1:4] &quot;Dim.1&quot; &quot;Dim.3&quot; &quot;Dim.4&quot; &quot;Dim.2&quot;
-##   .. .. .. ..$ : chr [1:6] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
-##   .. ..$ 5: num [1:3, 1:6] 68.3553 15.4611 3.2677 0.6472 0.0826 ...
+##   .. .. .. ..$ : chr [1:7] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
+##   .. ..$ 5: num [1:3, 1:7] 68.3553 15.4611 3.2677 0.6472 0.0826 ...
 ##   .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2
 ##   .. .. .. ..$ : chr [1:3] &quot;Dim.1&quot; &quot;Dim.4&quot; &quot;Dim.3&quot;
-##   .. .. .. ..$ : chr [1:6] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
-##   ..$ call      :List of 4
-##   .. ..$ num.var: int 5
-##   .. ..$ proba  : num 0.05
-##   .. ..$ row.w  : num [1:8403] 1 1 1 1 1 1 1 1 1 1 ...
-##   .. ..$ X      :&#39;data.frame&#39;:   8403 obs. of  5 variables:
+##   .. .. .. ..$ : chr [1:7] &quot;v.test&quot; &quot;Mean in category&quot; &quot;Overall mean&quot; &quot;sd in category&quot; ...
+##   ..$ call      :List of 5
+##   .. ..$ num.var  : int 5
+##   .. ..$ proba    : num 0.05
+##   .. ..$ row.w    : num [1:8403] 1 1 1 1 1 1 1 1 1 1 ...
+##   .. ..$ X        :&#39;data.frame&#39;: 8403 obs. of  5 variables:
 ##   .. .. ..$ Dim.1: num [1:8403] -0.791 -0.791 -0.791 -0.791 -0.791 ...
 ##   .. .. ..$ Dim.2: num [1:8403] -0.247 -0.247 -0.247 -0.247 -0.247 ...
 ##   .. .. ..$ Dim.3: num [1:8403] 0.108 0.108 0.108 0.108 0.108 ...
 ##   .. .. ..$ Dim.4: num [1:8403] 0.476 0.476 0.476 0.476 0.476 ...
 ##   .. .. ..$ clust: Factor w/ 5 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##   .. ..$ na.method: chr &quot;NA&quot;
 ##   ..- attr(*, &quot;class&quot;)= chr [1:2] &quot;catdes&quot; &quot;list&quot;
 ##  $ desc.ind  :List of 2
 ##   ..$ para:List of 5
@@ -707,12 +733,12 @@ Les classes 1 et 4 sont opposées sur l’axe 3, ce qui signifie que la 1 regrou
 ##   .. .. ..$ call       : language flashClust::hclust(d = dissi, method = method, members = weight)
 ##   .. .. ..$ dist.method: chr &quot;euclidean&quot;
 ##   .. .. ..- attr(*, &quot;class&quot;)= chr &quot;hclust&quot;
-##   .. ..$ nb.clust  : num 3
+##   .. ..$ nb.clust  : num 4
 ##   .. ..$ within    : num [1:8402] 0.413 0.294 0.258 0.228 0.209 ...
 ##   .. ..$ inert.gain: num [1:8402] 0.1191 0.0357 0.0301 0.0189 0.0181 ...
-##   .. ..$ quot      : num [1:8] 0.879 0.884 0.917 0.914 0.938 ...
+##   .. ..$ quot      : num [1:9] 1.59 1.04 1.53 1.17 1.08 ...
 ##   ..$ min             : num 3
-##   ..$ max             : num 10
+##   ..$ max             : num 11
 ##   ..$ X               :&#39;data.frame&#39;: 8403 obs. of  5 variables:
 ##   .. ..$ Dim 1: num [1:8403] -0.791 -0.791 -0.791 -0.791 -0.791 ...
 ##   .. ..$ Dim 2: num [1:8403] -0.247 -0.247 -0.247 -0.247 -0.247 ...
@@ -724,25 +750,25 @@ Les classes 1 et 4 sont opposées sur l’axe 3, ce qui signifie que la 1 regrou
 ##   ..$ vec             : logi FALSE
 ##   ..$ call            : language HCPC(res = acm, nb.clust = 5, graph = F)
 ##  - attr(*, &quot;class&quot;)= chr &quot;HCPC&quot;</code></pre>
-<div id="détermination-du-nombre-de-classes" class="section level3">
-<h3><span class="header-section-number">7.2.1</span> Détermination du nombre de classes</h3>
+<div id="détermination-du-nombre-de-classes" class="section level3 hasAnchor" number="7.2.1">
+<h3><span class="header-section-number">7.2.1</span> Détermination du nombre de classes<a href="classification-clustering.html#d%C3%A9termination-du-nombre-de-classes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Pour déterminer le nombre optimal de classes, on regarde la perte d’inertie inter-classes (pour ça, il faut lancer une première fois la commande avec un nombre arbitraire de classes). En effet, on part d’une situation où il n’y a que de l’inertie inter-classes (chaque classe comprenant un seul individu, il n’y a pas d’inertie intra-classe). Au fur et à mesure des regroupements, on va donc perdre en inertie inter-classes, jusqu’à la dernière étape où il y a une classe avec tous les individus et donc plus d’inertie inter. Le but du jeu consiste à “stopper” l’aggrégation avant de perdre une forte quantité d’inertie inter-classe. On s’intéresse au dernières étapes pour ne pas alourdir le graphique (et on prendra un nombre de classe inférieur à 20 en général, sinon, ce n’est pas très opérationnel…). Ce diagramme ressemble très fortement à l’éboulis des valeurs propres, et on cherche à peu près la même chose (un saut).</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" data-line-number="1"><span class="kw">barplot</span>(hc<span class="op">$</span>call<span class="op">$</span>t<span class="op">$</span>inert.gain[<span class="dv">1</span><span class="op">:</span><span class="dv">20</span>],<span class="dt">horiz =</span> T,<span class="dt">main=</span><span class="st">&quot;Gain d&#39;inertie intra sur les 20 dernières agrégations &quot;</span>,</a>
-<a class="sourceLine" id="cb79-2" data-line-number="2">          <span class="dt">col=</span><span class="st">&quot;lightblue&quot;</span>,<span class="dt">border =</span> <span class="st">&quot;grey&quot;</span>)</a></code></pre></div>
-<p><img src="exploration_avancee_files/figure-html/clust_4-1.png" width="576" /></p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="classification-clustering.html#cb79-1" tabindex="-1"></a><span class="fu">barplot</span>(hc<span class="sc">$</span>call<span class="sc">$</span>t<span class="sc">$</span>inert.gain[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>],<span class="at">horiz =</span> T,<span class="at">main=</span><span class="st">&quot;Gain d&#39;inertie intra sur les 20 dernières agrégations &quot;</span>,</span>
+<span id="cb79-2"><a href="classification-clustering.html#cb79-2" tabindex="-1"></a>          <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>,<span class="at">border =</span> <span class="st">&quot;grey&quot;</span>)</span></code></pre></div>
+<p><img src="exploration_avancee_files/figure-html/clust_4-1.png" alt="" width="576" /></p>
 <p>Autre représentation : le dendogramme représente les étapes d’agrégation. La auteur des branches représente la perte d’inertie inter-classe (ou le gain d’inertie intra)</p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" data-line-number="1"><span class="kw">plot</span>(hc, <span class="dt">choice =</span><span class="st">&quot;tree&quot;</span>)</a></code></pre></div>
-<p><img src="exploration_avancee_files/figure-html/clust_5-1.png" width="576" /></p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="classification-clustering.html#cb80-1" tabindex="-1"></a><span class="fu">plot</span>(hc, <span class="at">choice =</span><span class="st">&quot;tree&quot;</span>)</span></code></pre></div>
+<p><img src="exploration_avancee_files/figure-html/clust_5-1.png" alt="" width="576" /></p>
 </div>
-<div id="description-des-classes" class="section level3">
-<h3><span class="header-section-number">7.2.2</span> Description des classes</h3>
+<div id="description-des-classes" class="section level3 hasAnchor" number="7.2.2">
+<h3><span class="header-section-number">7.2.2</span> Description des classes<a href="classification-clustering.html#description-des-classes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Une fois que l’on a déterminé le nombre de classes, il reste à les décrire. Premier outil : le tableau croisé pour voir la taille de chacun.</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" data-line-number="1"><span class="kw">table</span> (hc<span class="op">$</span>data.clust<span class="op">$</span>clust)</a></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="classification-clustering.html#cb81-1" tabindex="-1"></a><span class="fu">table</span> (hc<span class="sc">$</span>data.clust<span class="sc">$</span>clust)</span></code></pre></div>
 <pre><code>## 
 ##    1    2    3    4    5 
 ## 2234 1290 1410 1722 1747</code></pre>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" data-line-number="1">hc<span class="op">$</span>desc.var<span class="op">$</span>category<span class="op">$</span><span class="st">`</span><span class="dt">1</span><span class="st">`</span></a>
-<a class="sourceLine" id="cb83-2" data-line-number="2">hc<span class="op">$</span>desc.ind<span class="op">$</span>para</a></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="classification-clustering.html#cb83-1" tabindex="-1"></a>hc<span class="sc">$</span>desc.var<span class="sc">$</span>category<span class="sc">$</span><span class="st">`</span><span class="at">1</span><span class="st">`</span></span>
+<span id="cb83-2"><a href="classification-clustering.html#cb83-2" tabindex="-1"></a>hc<span class="sc">$</span>desc.ind<span class="sc">$</span>para</span></code></pre></div>
 <ul>
 <li>cla/mod indique quelle part (pourcentage) de tous les individus présentant cette modalité se
 retrouve dans cette classe</li>
@@ -751,11 +777,11 @@ modalité.</li>
 <li>Les parangons sont les individus les plus représentatifs de la classe</li>
 </ul>
 <p>Visualisation du dendogrades classes sur les axes factoriels</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" data-line-number="1"><span class="kw">plot</span>(hc, <span class="dt">choice =</span><span class="st">&quot;3D.map&quot;</span>)</a></code></pre></div>
-<p><img src="exploration_avancee_files/figure-html/plot_hc-1.png" width="576" /></p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="classification-clustering.html#cb84-1" tabindex="-1"></a><span class="fu">plot</span>(hc, <span class="at">choice =</span><span class="st">&quot;3D.map&quot;</span>)</span></code></pre></div>
+<p><img src="exploration_avancee_files/figure-html/plot_hc-1.png" alt="" width="576" /></p>
 </div>
-<div id="quelques-conseils-pratiques" class="section level3">
-<h3><span class="header-section-number">7.2.3</span> Quelques conseils pratiques</h3>
+<div id="quelques-conseils-pratiques" class="section level3 hasAnchor" number="7.2.3">
+<h3><span class="header-section-number">7.2.3</span> Quelques conseils pratiques<a href="classification-clustering.html#quelques-conseils-pratiques" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Le but d’un classification est d’obtenir des groupes d’individus qui “parlent” (c’est un outils de communication puissant) ; l’application des méthodes à la lettre peut ne pas aboutir à un tel résultat. On peut alors jouer sur différents paramètres :</p>
 <ul>
 <li>Les variables mobilisées</li>
@@ -768,27 +794,27 @@ modalité.</li>
 <p>Il faut ensuite donner un nom aux classes (pas uniquement les décrire) : attention aux termes utilisés !</p>
 </div>
 </div>
-<div id="exercice-3" class="section level2">
-<h2><span class="header-section-number">7.3</span> Exercice</h2>
+<div id="exercice-3" class="section level2 hasAnchor" number="7.3">
+<h2><span class="header-section-number">7.3</span> Exercice<a href="classification-clustering.html#exercice-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Reprendre la base de données sur les iris et réaliser une classification des 150 fleurs</p>
 <ul>
 <li>Avec kmeans</li>
 <li>Avec une CAH</li>
 <li>Que peut-on dire des résultats et leur lien avec la variable Species ?</li>
 </ul>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" data-line-number="1">hc.iris &lt;-<span class="st"> </span><span class="kw">HCPC</span> (acp.iris, <span class="dt">nb.clust =</span> <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb85-2" data-line-number="2">kmeans.iris &lt;-<span class="st"> </span><span class="kw">kmeans</span> (acp.iris<span class="op">$</span>ind<span class="op">$</span>coord, <span class="dt">centers =</span> <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb85-3" data-line-number="3">res.iris &lt;-<span class="st"> </span><span class="kw">data.frame</span> (acp.iris<span class="op">$</span>ind<span class="op">$</span>coord, <span class="dt">classe =</span> <span class="kw">as.factor</span> (kmeans.iris<span class="op">$</span>cluster),</a>
-<a class="sourceLine" id="cb85-4" data-line-number="4">                       <span class="dt">Species =</span> iris<span class="op">$</span>Species)</a>
-<a class="sourceLine" id="cb85-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb85-6" data-line-number="6"><span class="kw">ggplot</span> (res.iris, <span class="kw">aes</span> (<span class="dt">x =</span> Dim<span class="fl">.1</span>, <span class="dt">y =</span> Dim<span class="fl">.2</span>, <span class="dt">color =</span> classe)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb85-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_point</span> ()</a></code></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="classification-clustering.html#cb85-1" tabindex="-1"></a>hc.iris <span class="ot">&lt;-</span> <span class="fu">HCPC</span> (acp.iris, <span class="at">nb.clust =</span> <span class="dv">3</span>)</span>
+<span id="cb85-2"><a href="classification-clustering.html#cb85-2" tabindex="-1"></a>kmeans.iris <span class="ot">&lt;-</span> <span class="fu">kmeans</span> (acp.iris<span class="sc">$</span>ind<span class="sc">$</span>coord, <span class="at">centers =</span> <span class="dv">3</span>)</span>
+<span id="cb85-3"><a href="classification-clustering.html#cb85-3" tabindex="-1"></a>res.iris <span class="ot">&lt;-</span> <span class="fu">data.frame</span> (acp.iris<span class="sc">$</span>ind<span class="sc">$</span>coord, <span class="at">classe =</span> <span class="fu">as.factor</span> (kmeans.iris<span class="sc">$</span>cluster),</span>
+<span id="cb85-4"><a href="classification-clustering.html#cb85-4" tabindex="-1"></a>                       <span class="at">Species =</span> iris<span class="sc">$</span>Species)</span>
+<span id="cb85-5"><a href="classification-clustering.html#cb85-5" tabindex="-1"></a></span>
+<span id="cb85-6"><a href="classification-clustering.html#cb85-6" tabindex="-1"></a><span class="fu">ggplot</span> (res.iris, <span class="fu">aes</span> (<span class="at">x =</span> Dim<span class="fl">.1</span>, <span class="at">y =</span> Dim<span class="fl">.2</span>, <span class="at">color =</span> classe)) <span class="sc">+</span></span>
+<span id="cb85-7"><a href="classification-clustering.html#cb85-7" tabindex="-1"></a>  <span class="fu">geom_point</span> ()</span></code></pre></div>
 <p>On compare à la vraie classe. Conclusion : la nature est mal faite…</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" data-line-number="1"><span class="co"># La vraie classe :</span></a>
-<a class="sourceLine" id="cb86-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb86-3" data-line-number="3"><span class="kw">ggplot</span> (res.iris, <span class="kw">aes</span> (<span class="dt">x =</span> Dim<span class="fl">.1</span>, <span class="dt">y =</span> Dim<span class="fl">.2</span>, <span class="dt">color =</span> Species)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb86-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span> ()</a></code></pre></div>
-<p><img src="exploration_avancee_files/figure-html/clust_9-1.png" width="576" /></p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="classification-clustering.html#cb86-1" tabindex="-1"></a><span class="co"># La vraie classe :</span></span>
+<span id="cb86-2"><a href="classification-clustering.html#cb86-2" tabindex="-1"></a></span>
+<span id="cb86-3"><a href="classification-clustering.html#cb86-3" tabindex="-1"></a><span class="fu">ggplot</span> (res.iris, <span class="fu">aes</span> (<span class="at">x =</span> Dim<span class="fl">.1</span>, <span class="at">y =</span> Dim<span class="fl">.2</span>, <span class="at">color =</span> Species)) <span class="sc">+</span></span>
+<span id="cb86-4"><a href="classification-clustering.html#cb86-4" tabindex="-1"></a>  <span class="fu">geom_point</span> ()</span></code></pre></div>
+<p><img src="exploration_avancee_files/figure-html/clust_9-1.png" alt="" width="576" /></p>
 
 </div>
 </div>
@@ -802,7 +828,6 @@ modalité.</li>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -813,38 +838,42 @@ modalité.</li>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": "https://github.com/MTES-MCT/parcours_r_module_analyse_multi_dimensionnelle/edit/master/05-Clustering.Rmd",
-"text": "Edit"
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": ["exploration_avancee.pdf", "exploration_avancee.epub"],
-"toc": {
-"collapse": "subsection"
-}
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/MTES-MCT/parcours_r_module_analyse_multi_dimensionnelle/edit/master/05-Clustering.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["exploration_avancee.pdf", "exploration_avancee.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
 });
 });
 </script>
@@ -855,7 +884,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

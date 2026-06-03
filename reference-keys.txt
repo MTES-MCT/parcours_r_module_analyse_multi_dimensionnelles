@@ -1,6 +1,4 @@
 introduction
-le-parcours-de-formation
-objectifs-du-module-4
 intro
 objectifs
 comment-synthétiser
@@ -13,7 +11,7 @@ variables-quantitatives
 variables-qualitatives
 entre-les-deux
 le-package-factominer
-bien-commencer
+get-started
 créer-un-projet-sous-rstudio-pour-vous-permettre-de-recenser-vos-travaux.
 intégrer-vos-données
 créer-votre-arborescence-de-projet

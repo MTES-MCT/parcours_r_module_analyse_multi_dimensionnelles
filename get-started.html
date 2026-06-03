@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapitre 2 Les analyses multivariées | Analyse des données multi-dimensionnelles</title>
+  <title>Chapitre 3 Bien commencer | Analyse des données multi-dimensionnelles</title>
   <meta name="description" content="Parcours de formation R (module 4)" />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapitre 2 Les analyses multivariées | Analyse des données multi-dimensionnelles" />
+  <meta property="og:title" content="Chapitre 3 Bien commencer | Analyse des données multi-dimensionnelles" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Parcours de formation R (module 4)" />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapitre 2 Les analyses multivariées | Analyse des données multi-dimensionnelles" />
+  <meta name="twitter:title" content="Chapitre 3 Bien commencer | Analyse des données multi-dimensionnelles" />
   
   <meta name="twitter:description" content="Parcours de formation R (module 4)" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="get-started.html"/>
+<link rel="prev" href="intro.html"/>
+<link rel="next" href="lacp.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -262,156 +262,97 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="intro" class="section level1 hasAnchor" number="2">
-<h1><span class="header-section-number">Chapitre 2</span> Les analyses multivariées<a href="intro.html#intro" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="objectifs" class="section level2 hasAnchor" number="2.1">
-<h2><span class="header-section-number">2.1</span> Objectifs<a href="intro.html#objectifs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>On dispose d’un grand volume de données :</p>
+<div id="get-started" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapitre 3</span> Bien commencer<a href="get-started.html#get-started" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="créer-un-projet-sous-rstudio-pour-vous-permettre-de-recenser-vos-travaux." class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Créer un projet sous Rstudio pour vous permettre de recenser vos travaux.<a href="get-started.html#cr%C3%A9er-un-projet-sous-rstudio-pour-vous-permettre-de-recenser-vos-travaux." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Pourquoi travailler avec les projets Rstudio plutôt que les scripts R ?</p>
 <ul>
-<li><span class="math inline">\(n\)</span> individus</li>
-<li><span class="math inline">\(p\)</span> variables, avec <span class="math inline">\(p&gt;2\)</span>, potentiellement de natures différentes (qualitatives, quantitatives, binaires…)</li>
+<li>Cela permet la portabilité : le répertoire de travail par défaut d’un projet est le répertoire où est ce projet. Si vous transmettez celui-ci à un collègue, le fait de lancer un programme ne dépend pas de l’arborescence de votre machine.</li>
 </ul>
-<p><span class="math inline">\(\Rightarrow\)</span> On ne peut pas examiner tous les croisements des variables 2 à 2.</p>
-<p>L’analyse multidimensionelle permet de croiser toutes les variables simultanément et de synthétiser l’information.</p>
-<p><strong>Les méthodes présentées ici entrent dans la famille des statistiques exploratoires, très utiles pour défricher certains jeux de données. Par contre, en général elles ne permettent pas directement de tester des hypothèses et encore moins d’inférer des causalités. </strong></p>
+<blockquote>
+<p><strong>Fini les <code>setwd("chemin/qui/marche/uniquement/sur/mon/poste")</code> !</strong></p>
+</blockquote>
+<ul>
+<li>Toujours sur la portabilité, un projet peut être utilisé avec un outil comme <code>renv</code> qui va vous intégrer en interne au projet l’ensemble des packages nécessaires au projet. Cela permet donc à votre collègue à qui vous passez votre projet de ne pas avoir à les installer et, surtout, si vous mettez à jour votre environnement R, votre projet restera toujours avec les versions des packages avec lesquelles vous avez fait tourner votre projet à l’époque. Cela évite d’avoir à subir les effets d’une mise à jour importante d’un package qui casserait votre code.</li>
+</ul>
+<p>Pour activer <code>renv</code> sur un projet, il faut l’installer avec <code>install.packages("renv")</code>.
+Pour intialiser la sauvegarde des packages employés dans le projet, il faut utiliser
+<code>renv::init()</code>
+Les packages chargés dans le projet sont enregistrés dans un sous-dossier dédié.
+En cours de travail sur le projet, la commande <code>renv::snapshot()</code> permet de faire une sauvegarde, la commande <code>renv::restore()</code> permet de charger la dernière sauvegarde.</p>
+<p><a href="https://blog.rstudio.com/2019/11/06/renv-project-environments-for-r/">En savoir plus sur renv</a></p>
+<ul>
+<li><p>Cela permet de se forcer à travailler en mode projet : on intègre à un seul endroit tout ce qui est lié à un projet : données brutes, données retravaillées, scripts, illustrations, documentations, publications… et donc y compris les packages avec <code>renv</code>.</p></li>
+<li><p>On peut travailler sur plusieurs projets en même temps, Rstudio ouvre autant de sessions que de projets dans ce cas.</p></li>
+<li><p>Les projets Rstudio intègrent une interface avec les outils de gestion de version Git et SVN. Cela veut dire que vous pouvez versionner votre projet et l’héberger simplement comme répertoire sur des plateformes de gestion de code telle que Github ou Gitlab.</p></li>
+</ul>
+<p><strong>Pour créer un projet : </strong></p>
+<ul>
+<li>Cliquez sur <em>Project</em> en haut à droite puis <em>New Project</em>.</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/MTES-MCT/parcours-r/master/parties_communes/images/creerprojet1.png" id="id" class="class" width="500" /></p>
+<ul>
+<li>Cliquez sur <em>New Directory</em>.</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/MTES-MCT/parcours-r/master/parties_communes/images/creerprojet2.png" id="id" class="class" width="500" /></p>
+<!-- ## Utilisation du package `{savoirfR}` -->
+<!-- ```{r collecte prez savoirfR, warning=FALSE, echo=FALSE, results='asis'} -->
+<!-- # Utilisation du chapitre de présentation de savoirfR présent dans https://github.com/MTES-MCT/parcours-r -->
+<!-- a <-  knitr::knit_child(text = stringi::stri_read_lines("https://raw.githubusercontent.com/MTES-MCT/parcours-r/master/parties_communes/savoir_faire.Rmd", encoding = "UTF-8"), quiet = TRUE) -->
+<!-- cat(a, sep = '\n') -->
+<!-- ``` -->
 </div>
-<div id="comment-synthétiser" class="section level2 hasAnchor" number="2.2">
-<h2><span class="header-section-number">2.2</span> Comment synthétiser ?<a href="intro.html#comment-synth%C3%A9tiser" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ul>
-<li>On souhaite passer d’un espace trop grand, non visualisable (<span class="math inline">\(p\)</span> dimensions) à un espace plus petit (moins de dimension).</li>
-<li>Mais on souhaite conserver l’essentiel de la variabilité entre individus <span class="math inline">\(\Rightarrow\)</span> Concept <strong>d’inertie du nuage de points</strong>.</li>
-</ul>
-<p><strong>Solution</strong> : On construit un nouvel espace, dans lequel l’inertie est concentrée sur les premiers axes factoriels. Autrement dit, on construit des nouvelles variables (qui définissent le nouvel espace), combinaisons linéaires des variables initiales, pour lesquelle l’inertie est maximale sur le nombre le plus réduit possible.</p>
+<div id="intégrer-vos-données" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Intégrer vos données<a href="get-started.html#int%C3%A9grer-vos-donn%C3%A9es" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Une bonne pratique est de créer un sous répertoire <code>/data</code> pour stocker les données sur lesquelles vous aurez à travailler.</p>
+<p>Vous pouvez le faire depuis l’explorateur de fichier de votre système d’exploitation ou directement à partir de l’explorateur de fichier de RStudio.</p>
+<p><img src="images/creerprojet3.png" id="id" class="class" width="500" /></p>
+<p>Cela marche bien quand on a un seul type de données, mais en général on va avoir à travailler sur des données brutes que l’on va retravailler ensuite et vouloir stocker à part. Si par la suite vous souhaitez avoir des exemples de bonnes pratiques sur comment structurer vos données, vous pouvez vous référer au <a href="http://r-pkgs.had.co.nz/data.html">chapitre data</a> du livre d’Hadley Wickham sur la construction de packages R (tout package R étant aussi un projet !).</p>
 </div>
-<div id="quelles-méthodes" class="section level2 hasAnchor" number="2.3">
-<h2><span class="header-section-number">2.3</span> Quelles méthodes ?<a href="intro.html#quelles-m%C3%A9thodes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Une première partie sera consacrée aux <strong>analyses factorielles</strong>. Ces dernières permettent de voir rapidement les corrélations ou liens entre variables dans le jeu de données, et de diminuer l’espace d’analyse en construisant des variables synthétiques. Quelques exemples :</p>
+<div id="créer-votre-arborescence-de-projet" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Créer votre arborescence de projet<a href="get-started.html#cr%C3%A9er-votre-arborescence-de-projet" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
-<li><strong>ACP</strong> (analyse en composantes principales) : analyse de <span class="math inline">\(p\)</span> variables <em>quantitatives</em></li>
-<li><strong>AFC</strong> (analyse factorielle des correspondances) : analyse de 2 variable <em>qualitatives</em></li>
-<li><strong>ACM</strong> (analyse des correspondances multiples) : analyse de <span class="math inline">\(p\)</span> variable <em>qualitatives</em></li>
-<li>etc…</li>
-</ul>
-<p>Quand on emploie ces méthodes, la procédure à suivre est toujours la même :</p>
-<ul>
-<li>Implémentation de la méthode choisie <span class="math inline">\(\rightarrow\)</span> création d’un objet R.</li>
-<li>Choix du nombre de variables synthétiques retenues.</li>
-<li>Interprétation des résultats :
-<ul>
-<li>Comment sont corrélées les variables initiales ?</li>
-<li>Quel sens puis-je donner à mes variables synthétiques ?</li>
-<li>Est-ce que des groupes d’individus se dégagent ?</li>
-</ul></li>
-</ul>
-<p>On verra enfin deux méthodes de classification (attention pour vos recherches en anglais : <em>clustering</em> est le terme correspondant ; <em>classification</em> fait référence aux algorithmes de discrimination). Ces méthodes visent à regrouper <span class="math inline">\(n\)</span> individus en <span class="math inline">\(k\)</span> classes, à partir de <span class="math inline">\(p\)</span> variables (continues ou qualitatives). Quelques exemples :</p>
-<ul>
-<li><strong>CAH</strong> (classification ascendante hiérarchique)</li>
-<li><strong>K-moyennes</strong> ou “nuées dynamiques”</li>
-<li>DBscan</li>
-<li>X-means</li>
-</ul>
-<p>Une ressource inestimable pour les méthodes de <em>clustering</em> (et le machine learning en général) : <a href="http://scikit-learn.org/stable/modules/clustering.html#clustering">Page de Scikit-lean</a>.</p>
-</div>
-<div id="lien-entre-ces-méthodes" class="section level2 hasAnchor" number="2.4">
-<h2><span class="header-section-number">2.4</span> Lien entre ces méthodes<a href="intro.html#lien-entre-ces-m%C3%A9thodes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ul>
-<li>Toutes visent à diminuer la dimension de l’espace d’analyse et à résumer au mieux l’information.</li>
-<li>Elles se basent toutes sur le critère d’inertie, autrement dit sur l’hétérogénéité des individus.</li>
-<li>Pour toutes, il faut choisir le nombre de variables (ou de classes) à retenir.</li>
-<li>Les analyses factorielles permettent de repérer les variables qui permettent le plus de résumer l’information.</li>
-<li>La classification permet de regrouper les individus aux caractéristiques proches. C’est la méthode la plus synthétique, donc la plus réductrice.</li>
-<li>Il est souvent pertinent d’utiliser une analyse factorielle + une méthode de partitionnement en complément pour bien comprendre l’information contenue dans les données.</li>
+<li>Créer un répertoire <code>/src</code> ou vous mettrez vos scripts R.</li>
+<li>Créer un répertoire <code>/figures</code> ou vous mettrez vos illustrations issues de R.</li>
 </ul>
 </div>
-<div id="notion-de-distance" class="section level2 hasAnchor" number="2.5">
-<h2><span class="header-section-number">2.5</span> Notion de distance<a href="intro.html#notion-de-distance" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>On parle de proximité entre les individus <span class="math inline">\(\Rightarrow\)</span> comment la mesurer ? Par une distance.</p>
-<p>Exemple de la distance euclidienne en 3D : <span class="math inline">\(D = \sqrt{(x_{b}-x_{a})^2+(y_{b}-y_{a})^2+(z_{b}-z_{a})^2}\)</span></p>
-<p>Il existe de nombreuses autres distances qui répondent à différents usages. En restant dans le domaine des distances géographiques, il existe par exemple la distance orthodromique, utilisée par les marins, qui est la plus courte à la surface du globe terrestre entre deux points (calculable avec les packages <a href="https://cran.r-project.org/web/packages/geosphere/geosphere.pdf">geosphere</a> ou <a href="https://cran.r-project.org/web/packages/fields/fields.pdf">fields</a>), ou la distance curviligne le long d’un réseau hydrographique utilisée par les hydrologues (calculable avec le <a href="https://cran.r-project.org/web/packages/riverdist/riverdist.pdf">package riverdist</a>).</p>
-<p>En génétique des populations, on utilise la distance génétique pour mesurer le degré de dissemblance entre deux génomes.</p>
-<p>En écologie des communautés, l’indice de Jaccard permet de comparer la composition en espèces de deux communautés A et B. C’est le pourcentage du nombre total d’espèces présentes dans au moins un des échantillons qui est commun aux deux échantillons :</p>
-<p><span class="math inline">\(J(A,B) =  \frac{|A \cap B|}{|A \cup B|}\)</span></p>
-<center>
-<img src="images/jaccard.png" style="width:50.0%" />
-</center>
-<p>C’est donc un indice de proximité qui varie de 0% (aucune espèce n’est commune aux deux échantillons) à 100% (toutes les espèces sont communes à A et à B).</p>
-<p>La distance de Jaccard est <span class="math inline">\(D_j = 1 - J\)</span>.</p>
-<p><span class="math inline">\(\Rightarrow\)</span> Il existe de nombreuses autres distances correspondant à différents usages et métiers.</p>
-<p>En statistiques, on est amené à utiliser des distances “exotiques” en plus de la distance euclidienne et de la distance de Jaccard : Distance du <span class="math inline">\({\chi}^2\)</span> (en AFC et ACM), Mahalanobis, Bray-Curtis …</p>
-</div>
-<div id="questions-à-se-poser" class="section level2 hasAnchor" number="2.6">
-<h2><span class="header-section-number">2.6</span> Questions à se poser<a href="intro.html#questions-%C3%A0-se-poser" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Mon objectif est de :</p>
-<ol style="list-style-type: decimal">
-<li>Déterminer une typologie <span class="math inline">\(\Rightarrow\)</span> classification / partitionnement.</li>
-<li>Explorer des liens entre variables et entre individus <span class="math inline">\(\Rightarrow\)</span> analyses factorielles.</li>
-</ol>
-<p>Puis, si l’on est dans le cas n°2, <a href="https://youtu.be/aiqGyLGrQ48">cette petite vidéo</a> (en anglais, mais l’accent de l’auteur aide à la compréhension) donne un rapide aperçu des questions à se poser avant de se lancer dans les analyses. On peut la résumer ainsi :</p>
-<ol start="3" style="list-style-type: decimal">
-<li><p>Que représente mon tableau de données ?</p>
+<div id="activer-les-packages-nécessaires" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Activer les packages nécessaires<a href="get-started.html#activer-les-packages-n%C3%A9cessaires" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Commencer par rajouter un script dans le répertoire <code>/src</code> à votre projet qui commencera par :</p>
 <ul>
-<li>Un tableau de contingence <span class="math inline">\(\Rightarrow\)</span> AFC</li>
-<li>Un tableau de <span class="math inline">\(n\)</span> individus x <span class="math inline">\(p\)</span> variables <span class="math inline">\(\Rightarrow\)</span> aller au point 4.</li>
-</ul></li>
-<li><p>Quels sont les éléments (lignes, colonnes) qui seront “actifs”, c’est-à-dire qui participeront à la constitution des axes, donc à la détermination des distances entre les individus ? Les autres éléments, dits “supplémentaires”, pourront être positionnés après coup sur les axes.</p></li>
-<li><p>Les variables sont-elles quantitatives ou qualitatives ?</p>
-<ul>
-<li>Quantitatives <span class="math inline">\(\Rightarrow\)</span> ACP</li>
-<li>Qualitatives, 2 variables et tableau de contingence <span class="math inline">\(\Rightarrow\)</span> AFC</li>
-<li>Qualitatives, autres cas <span class="math inline">\(\Rightarrow\)</span> ACM</li>
-</ul></li>
-<li><p>Si l’on est dans le cas de l’ACP, doit-on standardiser les variables ?</p></li>
-<li><p>Y a-t-il des valeurs manquantes dans le tableau à analyses ? Si oui, comment les gérer ?</p></li>
-</ol>
-</div>
-<div id="nature-des-variables" class="section level2 hasAnchor" number="2.7">
-<h2><span class="header-section-number">2.7</span> Nature des variables<a href="intro.html#nature-des-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>On distingue les variables qualitatives des variables quantitatives. Cependant, cette distinction n’est pas absolument évidente.</p>
-<div id="variables-quantitatives" class="section level3 hasAnchor" number="2.7.1">
-<h3><span class="header-section-number">2.7.1</span> Variables quantitatives<a href="intro.html#variables-quantitatives" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Une variable <strong>quantitative</strong> permet de mesurer une grandeur (quantité). Elle peut être :</p>
-<ul>
-<li><p><strong>discrète</strong> (un nombre fini de valeurs possibles). <em>Exemple : un nombre de logements</em></p></li>
-<li><p><strong>continue</strong> (<em>a priori</em>, toutes les valeurs possibles). <em>Exemple : une taille, une surface, un revenu</em></p></li>
+<li><p>activer l’ensemble des packages nécessaires</p></li>
+<li><p>charger les données dont vous aurez besoin.</p></li>
 </ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="get-started.html#cb1-1" tabindex="-1"></a><span class="fu">library</span> (tidyverse)</span>
+<span id="cb1-2"><a href="get-started.html#cb1-2" tabindex="-1"></a><span class="fu">library</span> (FactoMineR)</span>
+<span id="cb1-3"><a href="get-started.html#cb1-3" tabindex="-1"></a><span class="fu">library</span> (factoextra)</span>
+<span id="cb1-4"><a href="get-started.html#cb1-4" tabindex="-1"></a><span class="fu">library</span> (GGally)</span>
+<span id="cb1-5"><a href="get-started.html#cb1-5" tabindex="-1"></a><span class="fu">library</span> (ggExtra)</span>
+<span id="cb1-6"><a href="get-started.html#cb1-6" tabindex="-1"></a><span class="fu">library</span> (data.table)</span>
+<span id="cb1-7"><a href="get-started.html#cb1-7" tabindex="-1"></a><span class="fu">library</span> (DT)</span>
+<span id="cb1-8"><a href="get-started.html#cb1-8" tabindex="-1"></a><span class="fu">library</span> (grid)</span>
+<span id="cb1-9"><a href="get-started.html#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="get-started.html#cb1-10" tabindex="-1"></a>geoidd <span class="ot">&lt;-</span> <span class="fu">read.csv2</span> (<span class="at">file =</span> <span class="st">&quot;data/ACP.csv&quot;</span>, <span class="at">header =</span> T, <span class="at">encoding =</span> <span class="st">&quot;latin1&quot;</span>)</span>
+<span id="cb1-11"><a href="get-started.html#cb1-11" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="get-started.html#cb1-12" tabindex="-1"></a>taille <span class="ot">&lt;-</span> <span class="fu">read.csv2</span> (<span class="st">&quot;data/Effet_taille.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-13"><a href="get-started.html#cb1-13" tabindex="-1"></a>                     <span class="at">encoding =</span> <span class="st">&quot;latin1&quot;</span>)</span>
+<span id="cb1-14"><a href="get-started.html#cb1-14" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="get-started.html#cb1-15" tabindex="-1"></a><span class="fu">data</span> (iris)</span>
+<span id="cb1-16"><a href="get-started.html#cb1-16" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="get-started.html#cb1-17" tabindex="-1"></a><span class="fu">data</span> (hobbies)</span></code></pre></div>
 </div>
-<div id="variables-qualitatives" class="section level3 hasAnchor" number="2.7.2">
-<h3><span class="header-section-number">2.7.2</span> Variables qualitatives<a href="intro.html#variables-qualitatives" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Une variable <strong>qualitative</strong> indique des caractéristiques qui ne sont pas des quantités. Les différentes valeurs que peut prendre cette variable sont appelées les catégories ou modalités (<code>levels</code> dans R). Elle peut être :</p>
+<div id="bien-structurer-ses-projets-data" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> Bien structurer ses projets <em>data</em><a href="get-started.html#bien-structurer-ses-projets-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Plusieurs documents peuvent vous inspirer sur la structuration de vos projets <em>data</em> par la suite.</p>
+<p>En voici quelques uns :</p>
 <ul>
-<li><p><strong>ordonnée</strong> (exprimer un ordre). <em>Exemple : “petit - moyen - grand”</em></p></li>
-<li><p><strong>non ordonnée</strong>. <em>Exemple : une couleur, un groupe sanguin…</em></p></li>
+<li><a href="https://github.com/pavopax/new-project-template" class="uri">https://github.com/pavopax/new-project-template</a></li>
+<li><a href="https://nicercode.github.io/blog/2013-04-05-projects/" class="uri">https://nicercode.github.io/blog/2013-04-05-projects/</a></li>
+<li><a href="https://www.inwt-statistics.com/read-blog/a-meaningful-file-structure-for-r-projects.html" class="uri">https://www.inwt-statistics.com/read-blog/a-meaningful-file-structure-for-r-projects.html</a></li>
+<li><a href="http://projecttemplate.net/architecture.html" class="uri">http://projecttemplate.net/architecture.html</a></li>
 </ul>
-</div>
-<div id="entre-les-deux" class="section level3 hasAnchor" number="2.7.3">
-<h3><span class="header-section-number">2.7.3</span> Entre les deux<a href="intro.html#entre-les-deux" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Les variables binaires (ou boléennes) peuvent être considérées soit comme quantitatives, soit comme qualitatives.</p>
-<p>Les variables ordinales peuvent être codées quantitativement, comme par exemple un indice de satisfaction dans une enquête :
-- 0 : Pas satisfait du tout
-- 1 : Plutôt pas satisfait
-- 2 : Plutôt satisfait
-- 3 : Très satisfait
-Dans un tel cas, ce n’est pas très élégant car ça dépebd du codage choisi, mais on peut calculer des indices de satisfaction “moyens” par exemple pour comparer des groupes.</p>
-<p>À l’inverse, on peut discrétiser une variable quantitative pour la transformer en variable qualitative, avec la fonction <code>cut</code> et en précisant les bornes du découpage. En discrétisant, on perd une part de l’information (l’information intra-classe), donc c’est à éviter autant que possible en privilégiant les méthodes applicables aux variables quantitatives.</p>
-</div>
-</div>
-<div id="le-package-factominer" class="section level2 hasAnchor" number="2.8">
-<h2><span class="header-section-number">2.8</span> Le package FactoMineR<a href="intro.html#le-package-factominer" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Il existe de nombreux packages R pour les analyses multivariées : <code>ade4</code>, <code>vegan</code>, <code>cluster</code>, <code>Hmisc</code>, etc. Il a bien fallu choisir.</p>
-<p>Le package <code>FactoMineR</code> est décrit dans <a href="https://www.jstatsoft.org/index.php/jss/article/view/v025i01/v25i01.pdf">cet article du J. Stat. Software de 2008</a>. Il a donc fait ses preuves. Il est très employé : en décembre 2018, <a href="">l’article est cité plus de 1800 fois depuis 2008 dans Google Scholar</a><a href="https://scholar.google.fr/scholar?as_q=factominer&amp;as_epq=&amp;as_oq=&amp;as_eq=&amp;as_occt=any&amp;as_sauthors=husson&amp;as_publication=&amp;as_ylo=&amp;as_yhi=&amp;hl=fr&amp;as_sdt=0%2C5" class="uri">https://scholar.google.fr/scholar?as_q=factominer&amp;as_epq=&amp;as_oq=&amp;as_eq=&amp;as_occt=any&amp;as_sauthors=husson&amp;as_publication=&amp;as_ylo=&amp;as_yhi=&amp;hl=fr&amp;as_sdt=0%2C5</a>.</p>
-<p>Il permet de réaliser toutes les analyses multivariées usuelles et fournit de nombreuses aides graphiques à l’interprétation <span class="math inline">\(\Rightarrow\)</span> “école française de l’analyse multivariée”.</p>
-<p>Deux de ses fonctionnalités sont particulièrement intéressantes :</p>
-<ul>
-<li>La possibilité de projeter des variables ou des individus supplémentaires.</li>
-<li>La simplicité d’utilisation avec le package <a href="http://math.agrocampus-ouest.fr/infoglueDeliverLive/developpement/missMDA">missMDA</a> pour imputer les valeurs manquantes.</li>
-</ul>
-<p>La documentation associée est très riche, dont une bonne partie en français. Il y a en particulier :</p>
-<ul>
-<li><a href="http://factominer.free.fr/">Un site web</a></li>
-<li><a href="https://www.youtube.com/playlist?list=PLnZgp6epRBbTsZEFXi_p6W48HhNyqwxIu">Des tutos en vidéo</a></li>
-</ul>
-<p>Il existe un module complémentaire pour améliorer les graphiques de sortie : <a href="http://factominer.free.fr/graphs/factoshiny-fr.html">Factoshiny</a>.</p>
-<p>La plupart des méthodes qui ne sont pas comprises dans <code>FactoMineR</code> peuvent être mises en oeuvre avec le package <code>ade4</code>, en particulier pour l’analyse discriminante et les analyses à plusieurs tableaux (co-inertie, ACP sur variables instrumentales, analyse canonique des correspondences, analyse RLQ).</p>
+<p>À partir du moment où quelques grands principes sont respectés (un répertoire pour les données brutes en lecture seule par exemple), le reste est surtout une question d’attirance plus forte pour l’une ou l’autre solution. L’important est de vous tenir ensuite à conserver toujours la même arborescence dans vos projets afin de vous y retrouver plus simplement.</p>
 
 </div>
 </div>
@@ -420,8 +361,8 @@ Dans un tel cas, ce n’est pas très élégant car ça dépebd du codage choisi
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="get-started.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="intro.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="lacp.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -452,7 +393,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/MTES-MCT/parcours_r_module_analyse_multi_dimensionnelle/edit/master/01-intro.Rmd",
+    "link": "https://github.com/MTES-MCT/parcours_r_module_analyse_multi_dimensionnelle/edit/master/01b-get_started.Rmd",
     "text": "Edit"
   },
   "history": {
