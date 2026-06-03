@@ -1,0 +1,14 @@
+name: Test compilation de parcours_r_module4_analyse_multi_dimmensionnelles
+
+on:
+  pull_request:
+    branches: [main, master, dev, dev-ci]
+    
+  workflow_dispatch:
+
+jobs:
+  build-bookdown:
+    name: Build bookdown
+    uses: MTES-MCT/parcours-r/.github/workflows/bookdown-build-from-desc.yml@master
+    with:
+      r_version: '4.6.0'

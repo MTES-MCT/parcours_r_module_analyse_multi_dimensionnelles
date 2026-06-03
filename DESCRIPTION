@@ -1,8 +1,23 @@
-Package: Parcours-R
+Package: M4-Parcours-R
 Type: Book
-Title: Formations à R
+Title: Formations à R - Module 4 Analyses multi-dimensionnelles
 Version: 0.1.0
 URL: https://github.com/MTES-MCT/parcours_r_module_analyse_multi_dimensionnelles
-Imports: rmarkdown, htmltools, tidyverse, cartography, sf, GGally, dplyr, plotly, bookdown, RcppRoll, DT, RPostgreSQL, rsdmx, XML, lsr, ggmosaic, visNetwork, FactoMineR, factoextra, ggExtra, kableExtra, hrbrthemes, tmap, highcharter, waffle, gganimate, svglite, cowplot, gifski, docopt, webshot, ggspatial
 License: MIT
-Description: Valise pédagogique pour la formation à R
+Imports: 
+    bookdown,
+    COGiter,
+    data.table,
+    DT, 
+    factoextra, 
+    FactoMineR, 
+    GGally, 
+    ggExtra, 
+    grid,
+    knitr,
+    rmarkdown, 
+    savoirfR,
+    tidyverse
+Remotes: 
+    MaelTheuliere/COGiter,
+    MTES-MCT/savoirfR
